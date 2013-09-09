@@ -5,7 +5,7 @@ package Catmandu::Importer::XML;
 use namespace::clean;
 use Catmandu::Sane;
 use Moo;
-use XML::LibXML::Simple qw(XMLin); # TODO: remove
+# use XML::LibXML::Simple qw(XMLin);
 use XML::Struct;
 
 with 'Catmandu::Importer';
