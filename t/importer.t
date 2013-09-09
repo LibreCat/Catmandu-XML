@@ -8,8 +8,11 @@ sub check_import(@) {
     my $options = shift;
     my $file    = shift;
     my $importer = Catmandu::Importer::XML->new(file => $file, %$options);
-#    use Data::Dumper; print Dumper($importer->to_array)."\n";
-    is_deeply $importer->to_array, @_;
+    
+    my $data = $importer->to_array;
+    use Data::Dumper; print Dumper($data)."\n";
+
+    is_deeply $data, @_;
 }
 
 check_import { },
@@ -17,12 +20,52 @@ check_import { },
     'simple';
 
 check_import { type => 'ordered' },
-    \"<root><element>content</element></root>" => [ 
-        "root", {}, [
-            [ "element", {}, 'content' ]
+    \"<root x='1'><element>content</element></root>" => [ [ 
+        root => { x => 1 }, [
+            [ element => { } , [ 'content' ] ]
         ]
-    ],
-    'simple';
+    ] ],
+    'ordered';
 
+my $xml = <<'XML';
+<?xml version="1.0"?>
+<doc attr="value">
+  <field1>foo</field1>
+  <field1>bar</field1>
+  <field2>
+    <doz>baz</doz>
+  </field2>
+</doc>
+XML
+
+check_import { }, \$xml, [
+      {
+        attr => 'value',
+        field1 => [ 'foo', 'bar' ],
+        field2 => { 'doz' => 'baz' },
+      }
+    ], 'simple';
+
+check_import { type => 'ordered', attributes => 1 },
+    \$xml => [ 
+        [ doc => { attr => "value" }, [
+                [ field1 => { }, ["foo"] ],
+                [ field1 => { },  ["bar"] ],
+                [ field2 => { }, [ [ doz => { }, ["baz"] ] ] ]
+            ]
+        ] 
+    ], 'ordered with attributes';
+
+check_import { type => 'ordered', attributes => 0 },
+    \$xml => [ 
+        [ doc => [
+                [ field1 => ["foo"] ],
+                [ field1 => ["bar"] ],
+                [ field2 => [ [ doz => ["baz"] ] ] ]
+            ]
+        ]
+    ], 'ordered without attributes';
 
 done_testing;
+
+        
