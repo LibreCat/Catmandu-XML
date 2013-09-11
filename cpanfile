@@ -1,2 +1,2 @@
-requires 'Catmandu', '>= 0.7'; # implies Moo
-requires 'XML::Struct', '>= 0.03';
+requires 'Catmandu', '>= 0.7';
+requires 'XML::Struct', '>= 0.10';

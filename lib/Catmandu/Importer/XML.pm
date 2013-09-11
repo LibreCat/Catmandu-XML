@@ -1,45 +1,41 @@
 package Catmandu::Importer::XML;
-# ABSTRACT: Import XML data
+# ABSTRACT: Import serialized XML documents
 # VERSION
 
 use namespace::clean;
 use Catmandu::Sane;
 use Moo;
-# use XML::LibXML::Simple qw(XMLin);
-use XML::Struct;
+use XML::Struct::Reader;
 
 with 'Catmandu::Importer';
 
 has type => (is => 'ro', default => sub { 'simple' });
-has path => (is => 'ro', default => sub { '/*' }); # TODO: support
+has path => (is => 'ro', default => sub { '/*' });
+has root => (is => 'ro');
 has attributes => (is => 'ro', default => sub { 1 });
 has whitespace => (is => 'ro', default => sub { 0 });
 
 sub generator {
     my ($self) = @_;
-    my $read = 0;
-    sub {
-        state $type = $self->type;
-        state $fh   = $self->fh;
 
-        return if $read++;
-        if ($type eq 'simple') {
-            return XML::Struct::readXML(
-                $self->file || $fh, path => $self->path,
-                hashify => 1,
+    sub {
+        state $reader = do { 
+            my %options = (
+                from       => ($self->file || $self->fh),
+                path       => $self->path,
                 whitespace => $self->whitespace,
                 attributes => $self->attributes,
             );
-            # return XMLin($self->file || $fh); # equivalent apart from XML::Simple hacks
-        } elsif ($type eq 'ordered') {
-            return XML::Struct::readXML(
-                $self->file || $fh, path => $self->path,
-                whitespace => $self->whitespace,
-                attributes => $self->attributes,
-            );
-        } else {
-            return;
-        }
+            if ($self->type eq 'simple') {
+                $options{simple} = 1;
+                $options{root}   = $self->root;
+            } elsif ($self->type ne 'ordered') {
+                return;
+            }
+            XML::Struct::Reader->new(%options);
+        };
+
+        return $reader->readNext;
     }
 }
 
@@ -87,7 +83,25 @@ Attributes can be omitted with option C<attributes>.
 
 =back
 
+=head1 CONFIGURATION
+
+=over 4
+
+=item attributes
+
+=item path
+
+=item root
+
+=item whitespace
+
+=back
+
 =encoding utf8
+
+=head1 SEE ALSO
+
+This module is just a thin layer on top of L<XML::Struct::Reader>.
 
 =cut
 

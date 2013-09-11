@@ -4,8 +4,9 @@ package Catmandu::XML;
 
 =head1 DESCRIPTION
 
-Catmandu::XML contains modules for handling XML data within the L<Catmandu>
-framework. 
+L<Catmandu::XML> contains modules for handling XML data within the L<Catmandu>
+framework. Parsing and serializing is based on L<XML::LibXML> with
+L<XML::Struct>.
 
 =head1 MODULES
 
@@ -13,15 +14,15 @@ framework.
 
 =item L<Catmandu::Importer::XML>
 
+Import serialized XML documents as data structures.
+
 =item L<Catmandu::Exporter::XML>
+
+Serialize data structures as XML documents.
 
 =back
 
 =encoding utf8
-
-=head1 SEE ALSO
-
-L<Catmandu>, L<XML::LibXML> 
 
 =cut
 
