@@ -72,6 +72,14 @@ check_import { root => 1, attributes => 0  },
     "t/input.xml" => [ { doc => { id => [1,2,4], xx => 3 } } ],
     'simple without attributes, with root';
 
+check_import { type => 'simple', path => '/*/id' },
+    "t/input.xml" => [ { id => 1 }, { id => 2 }, { id => 4 } ], 
+    'multiple entries (root included by default)';
+
+check_import { type => 'simple', path => '/*/id', root => 0 },
+    "t/input.xml" => [ { }, { }, { } ], 
+    'multiple entries (disable root)';
+
 check_import { type => 'simple', path => '/*/id', root => 'n' },
     "t/input.xml" => [ { n => 1 }, { n => 2 }, { n => 4 } ], 
     'multiple entries (simple)';

@@ -10,10 +10,14 @@ use XML::Struct::Reader;
 with 'Catmandu::Importer';
 
 has type => (is => 'ro', default => sub { 'simple' });
-has path => (is => 'ro', default => sub { '/*' });
-has root => (is => 'ro');
+has path => (is => 'ro');
+has root => (is => 'lazy');
 has attributes => (is => 'ro', default => sub { 1 });
 has whitespace => (is => 'ro', default => sub { 0 });
+
+sub _build_root {
+    defined $_[0]->path ? 1 : 0;
+}
 
 sub generator {
     my ($self) = @_;
@@ -22,10 +26,10 @@ sub generator {
         state $reader = do { 
             my %options = (
                 from       => ($self->file || $self->fh),
-                path       => $self->path,
                 whitespace => $self->whitespace,
                 attributes => $self->attributes,
             );
+            $options{path} = $self->path if defined $self->path;
             if ($self->type eq 'simple') {
                 $options{simple} = 1;
                 $options{root}   = $self->root;
@@ -41,14 +45,16 @@ sub generator {
 
 =head1 DESCRIPTION
 
-This importer reads XML and transforms it into a data structure. Two types of
-structure can be choosen among:
+This importer reads XML and transforms it into a data structure. 
+
+=head1 CONFIGURATION
 
 =over 4
 
-=item simple (default)
+=item type
 
-Elements and attributes and converted to keys in a key-value structure. For instance
+By default (type "C<simple>"), elements and attributes and converted to keys in
+a key-value structure. For instance this document: 
 
     <doc attr="value">
       <field1>foo</field1>
@@ -60,40 +66,40 @@ Elements and attributes and converted to keys in a key-value structure. For inst
      
 is imported as
 
-      {
+    {
         attr => 'value',
         field1 => [ 'foo', 'bar' ],
         field2 => { 'doz' => 'baz' },
-      }
+    }
 
-=item ordered
+With type "C<ordered>" elements are preserved in the order of their appereance.
+For instance the sample document above is imported as:
 
-Elements are preserved in the order of their appereance. For instance the
-sample document above is imported as:
-
-        [ 
-            doc => { attr => "value" }, [
-                [ field1 => { }, ["foo"] ],
-                [ field1 => { },  ["bar"] ],
-                [ field2 => { }, [ [ doz => { }, ["baz"] ] ] ]
-            ]
-        ] 
-
-Attributes can be omitted with option C<attributes>.
-
-=back
-
-=head1 CONFIGURATION
-
-=over 4
+    [ 
+        doc => { attr => "value" }, [
+            [ field1 => { }, ["foo"] ],
+            [ field1 => { },  ["bar"] ],
+            [ field2 => { }, [ [ doz => { }, ["baz"] ] ] ]
+        ]
+    ] 
 
 =item attributes
 
+Include XML attributes. Enabled by default.
+
 =item path
+
+Path expression to select XML elements. If not set the root element is
+selected.
 
 =item root
 
+Include root element name, if enabled. Disabled by default, unless the C<path>
+option is set.
+
 =item whitespace
+
+Include ignoreable whitespace. Disabled by default.
 
 =back
 
@@ -101,7 +107,9 @@ Attributes can be omitted with option C<attributes>.
 
 =head1 SEE ALSO
 
-This module is just a thin layer on top of L<XML::Struct::Reader>.
+This module is just a thin layer on top of L<XML::Struct::Reader>. Have a look
+at L<XML::Struct> to implement Importers and Exporters for more specific
+XML-based data formats.
 
 =cut
 
