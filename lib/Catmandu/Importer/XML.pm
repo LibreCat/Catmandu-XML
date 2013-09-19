@@ -9,11 +9,13 @@ use XML::Struct::Reader;
 
 with 'Catmandu::Importer';
 
-has type => (is => 'ro', default => sub { 'simple' });
-has path => (is => 'ro');
-has root => (is => 'lazy');
-has attributes => (is => 'ro', default => sub { 1 });
-has whitespace => (is => 'ro', default => sub { 0 });
+has type        => (is => 'ro', default => sub { 'simple' });
+has path        => (is => 'ro');
+has root        => (is => 'lazy');
+has depth       => (is => 'ro');
+has ns          => (is => 'ro', default => sub { '' });
+has attributes  => (is => 'ro', default => sub { 1 });
+has whitespace  => (is => 'ro', default => sub { 0 });
 
 sub _build_root {
     defined $_[0]->path ? 1 : 0;
@@ -28,6 +30,8 @@ sub generator {
                 from       => ($self->file || $self->fh),
                 whitespace => $self->whitespace,
                 attributes => $self->attributes,
+                depth      => $self->depth,
+                ns         => $self->ns,
             );
             $options{path} = $self->path if defined $self->path;
             if ($self->type eq 'simple') {
@@ -83,6 +87,19 @@ For instance the sample document above is imported as:
         ]
     ] 
 
+=item depth
+
+Maximum depth for type "C<simple>". For instance with depth 1, the sample document above
+would be imported as:
+
+    {
+        attr => 'value',
+        field1 => [ 'foo', 'bar' ],
+        field2 => { 
+            doz => [ [ doz => { }, ["baz"] ] ]
+        }
+    }
+
 =item attributes
 
 Include XML attributes. Enabled by default.
@@ -96,6 +113,10 @@ selected.
 
 Include root element name, if enabled. Disabled by default, unless the C<path>
 option is set.
+
+=item ns
+
+Set to 'C<strip>' for stripping namespace prefixes and xmlns-attributes.
 
 =item whitespace
 

@@ -37,7 +37,8 @@ my $xml = <<'XML';
 </doc>
 XML
 
-check_import { }, \$xml, [
+check_import { }, 
+    \$xml => [
       {
         attr => 'value',
         field1 => [ 'foo', 'bar' ],
@@ -64,6 +65,17 @@ check_import { type => 'ordered', attributes => 0 },
             ]
         ]
     ], 'ordered without attributes';
+
+check_import { type => 'simple', depth => 1 },
+    \$xml => [
+      {
+        attr => 'value',
+        field1 => [ 'foo', 'bar' ],
+        field2 => { 
+            doz => [ [ doz => { }, ["baz"] ] ]
+        }
+      }
+    ], 'simple with depth=1';
 
 check_import { type => 'simple' },
     "t/input.xml" => [ { id => [1,2,4], xx => 3 } ], 'simple';
