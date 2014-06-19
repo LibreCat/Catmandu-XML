@@ -3,7 +3,6 @@ use Catmandu::Sane;
 use Moo;
 use XML::LibXML;
 use XML::LibXSLT;
-use Data::Dumper;
 
 with 'Catmandu::Fix::Base';
 
@@ -52,12 +51,11 @@ sub emit {
   });
 
   $perl;
-
 }
 
 =head1 NAME
 
-Catmandu::Fix::xml_transform - transform xml using xslt-stylesheets
+Catmandu::Fix::xml_transform - transform XML using XML stylesheet
 
 =head1 SYNOPSIS
    

@@ -1,6 +1,6 @@
 package Catmandu::XML;
-# ABSTRACT: Modules for handling XML data within the Catmandu framework
-# VERSION
+#ABSTRACT: Modules for handling XML data within the Catmandu framework
+#VERSION
 
 =head1 DESCRIPTION
 
@@ -20,7 +20,17 @@ Import serialized XML documents as data structures.
 
 Serialize data structures as XML documents.
 
+=item L<Catmandu::Fix::xml_transform>
+
+Transform XML using XSLT stylesheets.
+
 =back
+
+=head1 SEE ALSO
+
+This module requires the non-perl libraries libxml2 and libxslt installed. To
+install for instance on Ubuntu Linux call C<sudo apt-get install libxslt-dev
+libxml2-dev>.
 
 =encoding utf8
 

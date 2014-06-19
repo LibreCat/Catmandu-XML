@@ -1,2 +1,3 @@
-requires 'Catmandu', '>= 0.7';
-requires 'XML::Struct', '>= 0.14';
+requires 'Catmandu', '0.9';
+requires 'XML::Struct', '0.18';
+requires 'XML::LibXSLT', '1.90';
