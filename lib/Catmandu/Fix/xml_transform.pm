@@ -4,6 +4,8 @@ use Moo;
 use XML::LibXML;
 use XML::LibXSLT;
 
+use Catmandu::XML::Transformer;
+
 with 'Catmandu::Fix::Base';
 
 has field => (
@@ -18,7 +20,7 @@ has _transformer => (
   is => 'ro',
   lazy => 1,
   default => sub {
-    XML::LibXSLT->new()->parse_stylesheet(XML::LibXML->load_xml(location => $_[0]->file));
+    Catmandu::XML::Transformer->new( stylesheet => $_[0]->file );
   }
 );
 
@@ -42,11 +44,8 @@ sub emit {
     my $var = $_[0];   
     $fixer->emit_get_key($var,$key,sub{
       my $var = $_[0];
-      my $perl = "";
       my $results = $fixer->generate_var();   
-      $perl .= "my ${results} = ${transformer}->transform(XML::LibXML->load_xml(string => ${var}));";
-      $perl .= "${var} = ${transformer}->output_as_chars(${results});";
-      $perl;
+      return "${var} = ${transformer}->transform(${var});";
     });
   });
 
@@ -55,16 +54,20 @@ sub emit {
 
 =head1 NAME
 
-Catmandu::Fix::xml_transform - transform XML using XML stylesheet
+Catmandu::Fix::xml_transform - transform XML using XSLT stylesheet
 
 =head1 SYNOPSIS
    
    # Transforms the 'xml' from marcxml to dublin core xml
    xml_transform('xml',file => 'marcxml2dc.xsl');
 
+=head1 DESCRIPTION
+
+This L<Catmandu::Fix> transforms XML given as string or MicroXML format (see
+L<XML::Struct>) with an XSLT stylesheet.
+
 =head1 SEE ALSO
 
-L<Catmandu::Fix>
 
 =cut
 
