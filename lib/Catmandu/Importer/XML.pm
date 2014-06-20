@@ -1,6 +1,6 @@
 package Catmandu::Importer::XML;
-# ABSTRACT: Import serialized XML documents
-# VERSION
+#ABSTRACT: Import serialized XML documents
+#VERSION
 
 use namespace::clean;
 use Catmandu::Sane;
