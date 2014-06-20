@@ -22,7 +22,11 @@ Serialize data structures as XML documents.
 
 =item L<Catmandu::Fix::xml_transform>
 
-Transform XML using XSLT stylesheets.
+Fix function to transform XML using XSLT stylesheets.
+
+=item L<Catmandu::Fix::xml_transform>
+
+Fix function to transform XML using XSLT stylesheets.
 
 =back
 
