@@ -24,7 +24,7 @@ my %WriteMakefileArgs = (
     "XML::LibXSLT" => "1.90",
     "XML::Struct" => "0.18"
   },
-  "VERSION" => "0.04",
+  "VERSION" => "0.05",
   "test" => {
     "TESTS" => "t/*.t"
   }

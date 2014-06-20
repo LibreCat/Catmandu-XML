@@ -9,11 +9,7 @@ use XML::LibXML::Reader;
 
 with 'Catmandu::Fix::Base';
 
-has field => (
-    is => 'ro',
-    required => 1
-);
-
+has field      => (is => 'ro', required => 1);
 has attributes => (is => 'ro'); 
 has ns         => (is => 'ro');
 has content    => (is => 'ro');
@@ -21,7 +17,7 @@ has simple     => (is => 'ro');
 has root       => (is => 'ro');
 has depth      => (is => 'ro');
 has path       => (is => 'ro');
-has whitespace       => (is => 'ro');
+has whitespace => (is => 'ro');
 
 around BUILDARGS => sub {
     my ($orig,$class,$field,%opts) = @_;
@@ -33,8 +29,8 @@ around BUILDARGS => sub {
 };
 
 has _reader => (
-    is => 'ro',
-    lazy => 1,
+    is      => 'ro',
+    lazy    => 1,
     builder => sub {
         XML::Struct::Reader->new(
             map { $_ => $_[0]->$_ } grep { defined $_[0]->$_ }
@@ -46,14 +42,13 @@ has _reader => (
 sub emit {    
     my ($self,$fixer) = @_;    
 
-    my $perl = "";
     my $path = $fixer->split_path($self->field);
     my $key = pop @$path;
     
     my $reader = $fixer->capture($self->_reader); 
     my $xpath  = $fixer->capture($self->path);
 
-    $perl .= $fixer->emit_walk_path($fixer->var,$path,sub{
+    return $fixer->emit_walk_path($fixer->var,$path,sub{
         my $var = $_[0];     
         $fixer->emit_get_key($var,$key,sub{
             my $var = $_[0];
@@ -62,8 +57,6 @@ sub emit {
                 ": ${reader}->readDocument(\$stream);";
         });
     });
-    
-    $perl;
 }
 
 =head1 SYNOPSIS
