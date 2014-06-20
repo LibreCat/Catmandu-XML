@@ -1,4 +1,7 @@
 package Catmandu::Fix::xml_transform;
+#ABSTRACT: transform XML using XSLT stylesheet
+#VERSION
+
 use Catmandu::Sane;
 use Moo;
 use XML::LibXML;
@@ -9,65 +12,57 @@ use Catmandu::XML::Transformer;
 with 'Catmandu::Fix::Base';
 
 has field => (
-  is => 'ro',
-  required => 1
+    is => 'ro',
+    required => 1
 );
 has file => (
-  is => 'ro',
-  required => 1
+    is => 'ro',
+    required => 1
 );
 has _transformer => (
-  is => 'ro',
-  lazy => 1,
-  default => sub {
-    Catmandu::XML::Transformer->new( stylesheet => $_[0]->file );
-  }
+    is => 'ro',
+    lazy => 1,
+    default => sub {
+        Catmandu::XML::Transformer->new( stylesheet => $_[0]->file );
+    }
 );
 
 around BUILDARGS => sub {
-  my($orig,$class,$field,%opts) = @_;
-  $orig->($class,field => $field,file => $opts{file});
+    my($orig,$class,$field,%opts) = @_;
+    $orig->($class,field => $field,file => $opts{file});
 };
 
 # Transforms xml
-sub emit {  
-  my($self,$fixer) = @_;  
+sub emit {    
+    my ($self,$fixer) = @_;    
 
-  my $perl = "";
+    my $perl = "";
+    my $path = $fixer->split_path($self->field());
+    my $key = pop @$path;
+    
+    my $transformer = $fixer->capture($self->_transformer); 
 
-  my $path = $fixer->split_path($self->field());
-  my $key = pop @$path;
-  
-  my $transformer = $fixer->capture($self->_transformer()); 
-
-  $perl .= $fixer->emit_walk_path($fixer->var,$path,sub{
-    my $var = $_[0];   
-    $fixer->emit_get_key($var,$key,sub{
-      my $var = $_[0];
-      my $results = $fixer->generate_var();   
-      return "${var} = ${transformer}->transform(${var});";
+    $perl .= $fixer->emit_walk_path($fixer->var,$path,sub{
+        my $var = $_[0];     
+        $fixer->emit_get_key($var,$key,sub{
+            my $var = $_[0];
+            return "${var} = ${transformer}->transform(${var});";
+        });
     });
-  });
 
-  $perl;
+    $perl;
 }
 
-=head1 NAME
-
-Catmandu::Fix::xml_transform - transform XML using XSLT stylesheet
-
 =head1 SYNOPSIS
-   
-   # Transforms the 'xml' from marcxml to dublin core xml
-   xml_transform('xml',file => 'marcxml2dc.xsl');
+     
+  # Transforms the 'xml' from marcxml to dublin core xml
+  xml_transform('xml',file => 'marcxml2dc.xsl');
 
 =head1 DESCRIPTION
 
-This L<Catmandu::Fix> transforms XML given as string or MicroXML format (see
-L<XML::Struct>) with an XSLT stylesheet.
-
-=head1 SEE ALSO
-
+This L<Catmandu::Fix> transforms XML with an XSLT stylesheet. Based on
+L<Catmandu::XML::Transformer> the fix will transform and XML string into an XML
+string, MicroXML (L<XML::Struct>) into MicroXML, and a DOM into a DOM.
 
 =cut
 
