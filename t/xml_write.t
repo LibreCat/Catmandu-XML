@@ -12,9 +12,8 @@ is_deeply $data->{xml},
     'xml_write';
 
 $data = { xml => [ foo => [ [ bar => ['doz'] ] ] ] };
-serialize($data,'xml', attributes => 0, pretty => 1);
-is_deeply $data->{xml}, <<XML, 'xml_write(attributes:0, pretty:1)'; 
-<?xml version="1.0" encoding="UTF-8"?>
+serialize($data,'xml', attributes => 0, pretty => 1, xmldecl => 0);
+is_deeply $data->{xml}, <<XML, 'xml_write(attributes:0, pretty:1, xmldecl:0)'; 
 <foo>
   <bar>doz</bar>
 </foo>
