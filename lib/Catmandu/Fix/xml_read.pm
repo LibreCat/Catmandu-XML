@@ -1,5 +1,5 @@
 package Catmandu::Fix::xml_read;
-#ABSTRACT: parse XML
+#ABSTRACT: parse XML to MicroXML
 #VERSION
 
 use Catmandu::Sane;
@@ -115,7 +115,8 @@ not supported yet.
 
 =head1 SEE ALSO
 
-L<Catmandu::Fix::xml_write>
+L<Catmandu::Fix::xml_write>,
+L<Catmandu::Fix::xml_simple>
 
 =cut
 

@@ -20,9 +20,18 @@ Import serialized XML documents as data structures.
 
 Serialize data structures as XML documents.
 
-=item L<Catmandu::Fix::xml_transform>
+=item L<Catmandu::Fix::xml_read>
 
-Fix function to transform XML using XSLT stylesheets.
+Fix function to parse XML to MicroXML as implemented by L<XML::Struct>
+
+=item L<Catmandu::Fix::xml_write>
+
+Fix function to seralize XML.
+
+=item L<Catmandu::Fix::xml_simple>
+
+Fix function to parse XML or convert MicroXML to simple form as known from
+L<XML::Simple>.
 
 =item L<Catmandu::Fix::xml_transform>
 
