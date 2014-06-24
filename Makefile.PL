@@ -21,10 +21,10 @@ my %WriteMakefileArgs = (
   "NAME" => "Catmandu::XML",
   "PREREQ_PM" => {
     "Catmandu" => "0.9",
-    "XML::LibXSLT" => "1.90",
-    "XML::Struct" => "0.18"
+    "XML::LibXSLT" => "1.78",
+    "XML::Struct" => "0.22"
   },
-  "VERSION" => "0.06",
+  "VERSION" => "0.08",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -33,8 +33,8 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
   "Catmandu" => "0.9",
-  "XML::LibXSLT" => "1.90",
-  "XML::Struct" => "0.18"
+  "XML::LibXSLT" => "1.78",
+  "XML::Struct" => "0.22"
 );
 
 
