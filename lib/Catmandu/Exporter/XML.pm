@@ -6,7 +6,6 @@ use Catmandu::Sane;
 use Moo;
 
 use XML::Struct::Writer;
-use XML::SAX::Writer;
 use Catmandu::Util qw(io);
 
 with 'Catmandu::Exporter';
