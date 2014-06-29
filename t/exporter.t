@@ -42,7 +42,7 @@ $exporter = Catmandu::Exporter::XML->new(
     file => \$out, xmldecl => 0, field => 'xml'
 );
 $exporter->add( { xml => [ foo => { bar => 23 } ] } );
-is $out, "<foo bar=\"23\" />\n", 'export from field';
+is $out, "<foo bar=\"23\"/>\n", 'export from field';
 
 use File::Temp qw(tempdir);
 my $dir = tempdir();
@@ -53,7 +53,7 @@ $exporter->add_many([
     { _id => 'bar.xml', _xml => [ bar => {} ] },
 ]);
 ok(-e "$dir/foo.xml" and -e "$dir/bar.xml", 'export to directory');
-$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<foo />\n";
+$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<foo/>\n";
 $out = do { local (@ARGV, $/) = "$dir/foo.xml"; <> };
 is $out, $xml, 'exported to multiple files';
 

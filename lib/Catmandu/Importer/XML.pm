@@ -11,19 +11,14 @@ with 'Catmandu::Importer';
 
 has type        => (is => 'ro', default => sub { 'simple' });
 has path        => (is => 'ro');
-has root        => (is => 'lazy');
+has root        => (is => 'lazy', default => sub { defined $_[0]->path ? 1 : 0 });
 has depth       => (is => 'ro');
 has ns          => (is => 'ro', default => sub { '' });
 has attributes  => (is => 'ro', default => sub { 1 });
 has whitespace  => (is => 'ro', default => sub { 0 });
 
-sub _build_root {
-    defined $_[0]->path ? 1 : 0;
-}
-
 sub generator {
     my ($self) = @_;
-
     sub {
         state $reader = do { 
             my %options = (
@@ -36,7 +31,7 @@ sub generator {
             $options{path} = $self->path if defined $self->path;
             if ($self->type eq 'simple') {
                 $options{simple} = 1;
-                $options{root}   = $self->root;
+                $options{root} = $self->root;
             } elsif ($self->type ne 'ordered') {
                 return;
             }
