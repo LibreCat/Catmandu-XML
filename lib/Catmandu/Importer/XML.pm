@@ -44,11 +44,14 @@ sub generator {
 
 =head1 DESCRIPTION
 
-This importer reads XML and transforms it into a data structure. 
+This L<Catmandu::Importer> reads XML and transforms it into a data structure. 
+
+See L<Catmandu::Importer>, L<Catmandu::Iterable>, L<Catmandu::Logger> and
+L<Catmandu::Fixable> for methods and options derived from these modules.
 
 =head1 CONFIGURATION
 
-=over 4
+=over
 
 =item type
 
@@ -111,7 +114,7 @@ option is set.
 
 =item ns
 
-Set to 'C<strip>' for stripping namespace prefixes and xmlns-attributes.
+Set to C<strip> for stripping namespace prefixes and xmlns-attributes.
 
 =item whitespace
 
