@@ -59,6 +59,8 @@ string, MicroXML (L<XML::Struct>) into MicroXML, and a DOM into a DOM. If the
 stylesteet is intented to emit text (C<<  <xsl:output method="text"/> >>,
 however, this fix E<always> transforms produces a string.
 
+One ore multiple XSLT scripts can be specified with argument C<file>.
+
 =cut
 
 1;
