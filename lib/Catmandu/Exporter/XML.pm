@@ -46,28 +46,25 @@ has writer => (
 sub add {
     my ($self, $data) = @_;
 
-    if (defined $self->field) {
-        my $xml = $data->{$self->field};
-        if (defined $self->directory) {
-            my $filename = $data->{$self->filename};
-            $filename .= '.xml' if $filename !~ /\.xml/;
-            if ($filename !~ qr{^[^/\0]+$}) {
-                $self->log->error("disallowed filename: $filename");
-                # TODO: check for disallowed characters on non-Unix systems
-                return;
-            } else {
-                my $filename = $self->directory . "/$filename";
-                $self->log->debug("exporting XML to $filename");
-                $self->writer->handler->{fh} = io( $filename, mode => 'w' ); 
-                    # TODO: binmode => $self->writer->encoding // ':utf8'
-                $self->writer->write($xml);
-                $self->writer->handler->fh->close;
-            }
+    my $xml = defined $self->field ? $data->{$self->field} : $data;
+
+    if (defined $self->directory) {
+        my $filename = $data->{$self->filename};
+        $filename .= '.xml' if $filename !~ /\.xml/;
+        if ($filename !~ qr{^[^/\0]+$}) {
+            $self->log->error("disallowed filename: $filename");
+            # TODO: check for disallowed characters on non-Unix systems
+            return;
         } else {
+            my $filename = $self->directory . "/$filename";
+            $self->log->debug("exporting XML to $filename");
+            $self->writer->handler->{fh} = io( $filename, mode => 'w' ); 
+                # TODO: binmode => $self->writer->encoding // ':utf8'
             $self->writer->write($xml);
+            $self->writer->handler->fh->close;
         }
     } else {
-        $self->writer->write($data);
+        $self->writer->write($xml);
     }
 }
 
