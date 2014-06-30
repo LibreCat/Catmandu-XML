@@ -11,25 +11,22 @@ use Catmandu::XML::Transformer;
 
 with 'Catmandu::Fix::Base';
 
-has field => (
-    is => 'ro',
-    required => 1
-);
-has file => (
-    is => 'ro',
-    required => 1
-);
+has field       => (is => 'ro', required => 1);
+has file        => (is => 'ro', required => 1);
+
 has _transformer => (
     is => 'ro',
     lazy => 1,
     default => sub {
-        Catmandu::XML::Transformer->new( stylesheet => $_[0]->file );
+        Catmandu::XML::Transformer->new( 
+            stylesheet => $_[0]->file 
+        );
     }
 );
 
 around BUILDARGS => sub {
     my($orig,$class,$field,%opts) = @_;
-    $orig->($class,field => $field,file => $opts{file});
+    $orig->($class,field => $field, file => $opts{file});
 };
 
 sub emit {    
@@ -58,7 +55,9 @@ sub emit {
 
 This L<Catmandu::Fix> transforms XML with an XSLT stylesheet. Based on
 L<Catmandu::XML::Transformer> the fix will transform and XML string into an XML
-string, MicroXML (L<XML::Struct>) into MicroXML, and a DOM into a DOM.
+string, MicroXML (L<XML::Struct>) into MicroXML, and a DOM into a DOM. If the
+stylesteet is intented to emit text (C<<  <xsl:output method="text"/> >>,
+however, this fix E<always> transforms produces a string.
 
 =cut
 

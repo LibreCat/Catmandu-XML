@@ -22,22 +22,28 @@ has stylesheet => (
 sub transform {
     my ($self, $xml) = @_;
 
+    my $result;
+
     # DOM to DOM
     if (blessed $xml && $xml->isa('XML::LibXML::Document')) {
-        return $self->stylesheet->transform($xml);
+        $result = $self->stylesheet->transform($xml);
+        if ($self->stylesheet->output_method ne 'text') {
+            return $result;
+        }
     # MicroXML to MicroXML
     } elsif (ref $xml) {
-        $xml = XML::Struct::Writer->new->write( $xml );
-        my $result = $self->stylesheet->transform( $xml );
-        return XML::Struct::Reader->new( from => $result )->readDocument;
+        $xml = XML::Struct::Writer->new->write($xml);
+        $result = $self->stylesheet->transform($xml);
+        if ($self->stylesheet->output_method ne 'text') {
+            return XML::Struct::Reader->new( from => $result )->readDocument;
+        }
     # string to string
     } else {
         $xml = XML::LibXML->load_xml(string => $xml);
-        my $result = $self->stylesheet->transform($xml);
-        return $self->stylesheet->output_as_chars($result);
+        $result = $self->stylesheet->transform($xml);
     }
 
-    return;
+    return $result ? $self->stylesheet->output_as_chars($result) : undef;
 }
 
 1;
