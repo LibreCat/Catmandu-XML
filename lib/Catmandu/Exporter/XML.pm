@@ -17,7 +17,6 @@ has directory => (
 has field => ( 
     is      => 'ro',
     lazy    => 1, 
-    default => sub { defined $_[0]->directory ? '_xml' : undef }
 );
 has filename  => ( 
     is => 'ro', 
@@ -83,10 +82,15 @@ written to STDOUT.
 =over
 
 =item attributes
+
 =item xmldecl
+
 =item encoding
+
 =item version
+
 =item standalone
+
 =item pretty
 
 These options are passed to L<XML::Struct::Writer>. The target (option C<to>)
@@ -97,8 +101,6 @@ is based on L<Catmandu::Exporter>'s option C<fh> or C<file>.
 Take XML from a given field of each item, e.g. field C<xml> as following:
 
     { xml => [ root => { xmlns => 'http://example.org/' }, [ ... ] ] }
-
-The default field name C<_xml> is implied if option C<directory> is set.
 
 =item directory
 

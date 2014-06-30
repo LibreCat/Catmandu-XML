@@ -47,7 +47,7 @@ is $out, "<foo bar=\"23\"/>\n", 'export from field';
 use File::Temp qw(tempdir);
 my $dir = tempdir();
 
-$exporter = Catmandu::Exporter::XML->new( directory => $dir );
+$exporter = Catmandu::Exporter::XML->new( directory => $dir, field => '_xml' );
 $exporter->add_many([
     { _id => 'foo', _xml => [ foo => {} ] },
     { _id => 'bar.xml', _xml => [ bar => {} ] },
