@@ -24,6 +24,24 @@ has filename  => (
     default => sub { defined $_[0]->directory ? '_id' : undef }
 );
 
+# This overrides Catmandu::Exporter -- TODO: move to Catmandu::Exporter?
+our %ENCODINGS = (
+    'UTF-8' => ':utf8',
+    'ISO-8859-1' => ':encoding(iso-8859-1)'
+);
+has '+encoding' => (
+    is => 'ro', 
+    default => sub {'UTF-8'},
+    isa => sub { die "unknown encoding $_[0]" if !$ENCODINGS{$_[0]} },
+);
+has '+fh' => (
+    is      => 'ro',
+    lazy    => 1,
+    default => sub { 
+        io($_[0]->file, mode => 'w', binmode => $ENCODINGS{$_[0]->encoding}) 
+    },
+);
+
 our @WRITER_OPTIONS;
 BEGIN {
     @WRITER_OPTIONS = qw(attributes xmldecl encoding version standalone pretty);
@@ -58,8 +76,9 @@ sub add {
         } else {
             my $filename = $self->directory . "/$filename";
             $self->log->debug("exporting XML to $filename");
-            $self->writer->handler->{fh} = io( $filename, mode => 'w' ); 
-                # TODO: binmode => $self->writer->encoding // ':utf8'
+            $self->writer->handler->{fh} = io( 
+                $filename, mode => 'w', binmode => $ENCODINGS{$self->encoding}
+            ); 
             $self->writer->write($xml);
             $self->writer->handler->fh->close;
         }
