@@ -10,7 +10,7 @@ sub check_import(@) {
     my $importer = Catmandu::Importer::XML->new(file => $file, %$options);
     
     my $data = $importer->to_array;
-#     use Data::Dumper; print Dumper($data)."\n";
+#    use Data::Dumper; print Dumper($data)."\n";
     is_deeply $data, @_;
 }
 
@@ -95,5 +95,10 @@ check_import { type => 'simple', path => '/*/id', root => 0 },
 check_import { type => 'simple', path => '/*/id', root => 'n' },
     "t/input.xml" => [ { n => 1 }, { n => 2 }, { n => 4 } ], 
     'multiple entries (simple)';
+
+check_import { type => 'simple', path => 'doc', transform => 't/transform3.xsl' },
+    "t/collection.xml" => [ 
+        { doz => 1 }, { doz => 2 }, { doz => 3 } 
+    ], 'import with transformation'; 
 
 done_testing;
