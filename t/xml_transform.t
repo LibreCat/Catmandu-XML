@@ -29,8 +29,12 @@ $data = { xml => $xml };
 transform($data,'xml', file => [] );
 is_deeply $data, { xml => "<?xml version=\"1.0\"?>\n$xml\n" }, 'empty transformation (string)';
 
-$data = { xml => $struct };
-transform($data,'xml', file => [qw(t/transform1.xsl t/transform3.xsl)]);
-is_deeply $data, { xml => [ doz => { }, [ ] ] }, 'transformation pipeline';
+foreach my $pipeline ( 
+        't/transform1.xsl,t/transform3.xsl', 
+        [qw(t/transform1.xsl t/transform3.xsl)] ) {
+    $data = { xml => $struct };
+    transform($data,'xml', file => $pipeline);
+    is_deeply $data, { xml => [ doz => { }, ['bar'] ] }, 'transformation pipeline';
+}
 
 done_testing;

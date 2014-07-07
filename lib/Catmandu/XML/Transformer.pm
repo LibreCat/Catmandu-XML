@@ -6,68 +6,67 @@ use Catmandu::Sane;
 use Moo;
 use XML::LibXML;
 use XML::LibXSLT;
-use Scalar::Util qw(blessed);
+use Scalar::Util qw(blessed reftype);
 use XML::Struct::Reader;
 use XML::Struct::Writer;
 
 has stylesheet => (
     is       => 'ro',
-    required => 1,
     coerce   => sub {
         [ 
             map {
                 XML::LibXSLT->new()->parse_stylesheet(
                     XML::LibXML->load_xml(location => $_, no_cdata=>1)
                 )
-            } (ref $_[0] // '' eq 'ARRAY' ? @{$_[0]} : $_[0])
+            } (ref $_[0] // '' eq 'ARRAY' ? @{$_[0]} : split /,/, $_[0])
         ]
-    }
+    },
+    default => sub { [] }
 );
 
-has has_text_output => (
-    is      => 'lazy',
-    default => sub {
-        @{$_[0]->stylesheet} and $_[0]->stylesheet->[-1]->output_method eq 'text'
-    }
-);
-
-sub transform_dom {
-    my ($self, $dom) = @_;
-
-    foreach (@{$self->stylesheet}) {
-        $dom = $_->transform($dom);
-    }
-
-    return $dom;
-}
+has output_format => (is => 'ro', coerce => sub { uc($_[0]) });
 
 sub transform {
     my ($self, $xml) = @_;
-    my $result;
+    my ($format, $result);
 
-    # DOM to DOM
+    return if !defined $xml;
+
     if (blessed $xml && $xml->isa('XML::LibXML::Document')) {
-        $result = $self->transform_dom($xml);
-        unless ($self->has_text_output) {
-            return $result;
-        }
-    # MicroXML to MicroXML
+        $format = 'DOM';
     } elsif (ref $xml) {
-        $xml = XML::Struct::Writer->new->write($xml);
-        $result = $self->transform_dom($xml);
-        unless ($self->has_text_output) {
-            return XML::Struct::Reader->new( from => $result )->readDocument;
+        if (reftype $xml eq 'ARRAY') {
+            ($format, $xml) = (STRUCT => XML::Struct::Writer->new->write($xml));
+        } else {
+            ($format, $xml) = (SIMPLE => XML::Struct::Writer->new(simple => 1)->write($xml));
         }
-    # string to string
     } else {
-        $xml = XML::LibXML->load_xml(string => $xml);
-        $result = $self->transform_dom($xml);
+        ($format, $xml) = (STRING => XML::LibXML->load_xml(string => $xml));
     }
 
-    if ($result and $self->stylesheet->[-1]) {
-        return $self->stylesheet->[-1]->output_as_chars($result);
+    $format = $self->output_format if $self->output_format;
+
+    if (@{$self->stylesheet}) {
+        $format = 'STRING' if $_[0]->stylesheet->[-1]->output_method eq 'text';
+        foreach (@{$self->stylesheet}) {
+            $xml = $_->transform($xml);
+        }
+    }
+
+    if ($format eq 'STRING') {
+        if ($self->stylesheet->[-1]) {
+            return $self->stylesheet->[-1]->output_as_chars($xml);
+        } else {
+            return $xml->toString;
+        }
+    } elsif ($format eq 'STRUCT') {
+        return XML::Struct::Reader->new( from => $xml )->readDocument;
+    } elsif ($format eq 'SIMPLE') {
+        # TODO: is root => 1 the right choice?
+        $xml = XML::Struct::Reader->new( from => $xml, simple => 1, root => 1 )->readDocument;
+        return $xml;
     } else {
-        return $result;
+        return $xml;
     }
 }
 
@@ -81,10 +80,21 @@ sub transform {
 
 =head1 CONFIGURATION
 
-=head1 stylesheet
+=over
 
-XSLT filename or array reference with multiple files to apply as transformation
-pipeline.
+=item stylesheet
+
+XSLT file, comma-separated list of files or array reference with multiple files
+to apply as transformation pipeline. If no stylesheet is given, the input
+document will just as DOM, string, or structure/simple (L<XML::Struct>).
+
+=item output_format
+
+Expected output format C<DOM>, C<string>, C<struct>, C<simple>. By default the
+input format triggers the output format. If the last stylesheet has text output
+(C<< <xsl:output method="text"/> >>) then output format is always C<string>.
+
+=back
 
 =cut
 
