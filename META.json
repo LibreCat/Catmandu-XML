@@ -1,7 +1,7 @@
 {
    "abstract" : "modules for handling XML data within the Catmandu framework",
    "author" : [
-      "-"
+      "Jakob Voß"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Dist::Milla version v1.0.8, Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.141520",
