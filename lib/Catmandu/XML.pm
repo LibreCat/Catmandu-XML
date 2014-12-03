@@ -1,6 +1,22 @@
 package Catmandu::XML;
-#ABSTRACT: Modules for handling XML data within the Catmandu framework
-#VERSION
+
+our $VERSION = '0.15';
+
+__END__
+
+=head1 NAME
+
+Catmandu::XML - modules for handling XML data within the Catmandu framework
+
+=begin markdown
+
+# Status
+
+[![Build Status](https://travis-ci.org/gbv/Catmandu-XML.png)](https://travis-ci.org/gbv/Catmandu-XML)
+[![Coverage Status](https://coveralls.io/repos/gbv/Catmandu-XML/badge.png)](https://coveralls.io/r/gbv/Catmandu-XML)
+[![Kwalitee Score](http://cpants.cpanauthors.org/dist/Catmandu-XML.png)](http://cpants.cpanauthors.org/dist/Catmandu-XML)
+
+=end markdown
 
 =head1 DESCRIPTION
 
@@ -47,6 +63,11 @@ libxml2-dev>.
 
 =encoding utf8
 
-=cut
+=head1 COPYRIGHT AND LICENSE
 
-1;
+Copyright Jakob Voss, 2014-
+
+This is free software; you can redistribute it and/or modify it under the same
+terms as the Perl 5 programming language system itself.
+
+=cut

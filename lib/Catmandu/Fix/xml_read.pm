@@ -1,6 +1,6 @@
 package Catmandu::Fix::xml_read;
-#ABSTRACT: parse XML to MicroXML
-#VERSION
+
+our $VERSION = '0.15';
 
 use Catmandu::Sane;
 use Moo;
@@ -58,6 +58,13 @@ sub emit {
         });
     });
 }
+
+1;
+__END__
+
+=head1 NAME
+
+Catmandu::Fix::xml_read - parser XML to MicroXML
 
 =head1 SYNOPSIS
      
@@ -119,5 +126,3 @@ L<Catmandu::Fix::xml_write>,
 L<Catmandu::Fix::xml_simple>
 
 =cut
-
-1;

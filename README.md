@@ -1,11 +1,55 @@
-Catmandu::XML - Modules for handling XML data within the [Catmandu](http://librecat.org) framework.
+# NAME
 
-This [CPAN distribution](https://metacpan.org/release/Catmandu-XML) is in an
-early state of development. Feedback and contributions are very welcome at
-<https://github.com/gbv/Catmandu-XML>!
+Catmandu::XML - modules for handling XML data within the Catmandu framework
 
 # Status
 
 [![Build Status](https://travis-ci.org/gbv/Catmandu-XML.png)](https://travis-ci.org/gbv/Catmandu-XML)
 [![Coverage Status](https://coveralls.io/repos/gbv/Catmandu-XML/badge.png)](https://coveralls.io/r/gbv/Catmandu-XML)
 [![Kwalitee Score](http://cpants.cpanauthors.org/dist/Catmandu-XML.png)](http://cpants.cpanauthors.org/dist/Catmandu-XML)
+
+# DESCRIPTION
+
+[Catmandu::XML](https://metacpan.org/pod/Catmandu::XML) contains modules for handling XML data within the [Catmandu](https://metacpan.org/pod/Catmandu)
+framework. Parsing and serializing is based on [XML::LibXML](https://metacpan.org/pod/XML::LibXML) with
+[XML::Struct](https://metacpan.org/pod/XML::Struct).
+
+# MODULES
+
+- [Catmandu::Importer::XML](https://metacpan.org/pod/Catmandu::Importer::XML)
+
+    Import serialized XML documents as data structures.
+
+- [Catmandu::Exporter::XML](https://metacpan.org/pod/Catmandu::Exporter::XML)
+
+    Serialize data structures as XML documents.
+
+- [Catmandu::Fix::xml\_read](https://metacpan.org/pod/Catmandu::Fix::xml_read)
+
+    Fix function to parse XML to MicroXML as implemented by [XML::Struct](https://metacpan.org/pod/XML::Struct)
+
+- [Catmandu::Fix::xml\_write](https://metacpan.org/pod/Catmandu::Fix::xml_write)
+
+    Fix function to seralize XML.
+
+- [Catmandu::Fix::xml\_simple](https://metacpan.org/pod/Catmandu::Fix::xml_simple)
+
+    Fix function to parse XML or convert MicroXML to simple form as known from
+    [XML::Simple](https://metacpan.org/pod/XML::Simple).
+
+- [Catmandu::Fix::xml\_transform](https://metacpan.org/pod/Catmandu::Fix::xml_transform)
+
+    Fix function to transform XML using XSLT stylesheets.
+
+# SEE ALSO
+
+This module requires the non-perl libraries libxml2 and libxslt installed. To
+install for instance on Ubuntu Linux call `sudo apt-get install libxslt-dev
+libxml2-dev`.
+
+# COPYRIGHT AND LICENSE
+
+Copyright Jakob Voss, 2014-
+
+This is free software; you can redistribute it and/or modify it under the same
+terms as the Perl 5 programming language system itself.

@@ -1,6 +1,6 @@
 package Catmandu::Exporter::XML;
-#ABSTRACT: serialize and export XML documents
-#VERSION
+
+our $VERSION = '0.15';
 
 use Catmandu::Sane;
 use Moo;
@@ -68,6 +68,13 @@ sub add {
     }
 }
 
+1;
+__END__
+
+=head1 NAME
+
+Catmandu::Exporter::XML - serialize and export XML documents
+
 =head1 DESCRIPTION
 
 This L<Catmandu::Exporter> exports items serialized as XML. Serialization is
@@ -111,5 +118,3 @@ The file extension C<.xml> is appended unless given.
 =back
 
 =cut
-
-1;

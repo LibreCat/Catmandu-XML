@@ -1,6 +1,6 @@
 package Catmandu::Fix::xml_simple;
-#ABSTRACT: parse/convert XML to simple form
-#VERSION
+
+our $VERSION = '0.15';
 
 use Catmandu::Sane;
 use Moo;
@@ -76,6 +76,13 @@ PERL
     });
 }
 
+1;
+__END__
+
+=head1 NAME
+
+Catmandu::Fix::xml_simple - parse/convert XML to simple form
+
 =head1 SYNOPSIS
      
   xml_read(xml)
@@ -93,5 +100,3 @@ L<XML::Struct>.
 See L<Catmandu::Fix::xml_read> for parsing options.
 
 =cut
-
-1;

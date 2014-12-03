@@ -1,6 +1,6 @@
 package Catmandu::XML::Transformer;
-#ABSTRACT: Utility module for XSLT processing
-#VERSION
+
+our $VERSION = '0.15';
 
 use Catmandu::Sane;
 use Moo;
@@ -70,6 +70,15 @@ sub transform {
     }
 }
 
+1;
+__END__
+
+=head1 NAME
+
+Catmandu::XML::Transformer - Utility module for XSLT processing
+
+=cut
+
 =head1 SYNOPISIS
 
     my $transformer = Catamandu::XML::Transformer->new( stylesheet => 'file.xsl' );
@@ -85,8 +94,7 @@ sub transform {
 =item stylesheet
 
 XSLT file, comma-separated list of files or array reference with multiple files
-to apply as transformation pipeline. If no stylesheet is given, the input
-document will just as DOM, string, or structure/simple (L<XML::Struct>).
+to apply as transformation pipeline.
 
 =item output_format
 
@@ -96,6 +104,8 @@ input format triggers the output format. If the last stylesheet has text output
 
 =back
 
-=cut
+=head1 SEE ALSO
 
-1;
+L<XML::Struct>
+
+=cut

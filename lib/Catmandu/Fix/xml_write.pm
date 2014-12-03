@@ -1,6 +1,6 @@
 package Catmandu::Fix::xml_write;
-#ABSTRACT: parse XML
-#VERSION
+
+our $VERSION = '0.15';
 
 use Catmandu::Sane;
 use Moo;
@@ -58,6 +58,13 @@ sub emit {
     });
 }
 
+1;
+__END__
+
+=head1 NAME
+
+Catmandu::Fix::xml_write - parse XML
+
 =head1 SYNOPSIS
      
   # serialize XML structure given in field 'xml' 
@@ -97,5 +104,3 @@ Pretty-print XML if set to C<1>.
 L<Catmandu::Fix::xml_read>
 
 =cut
-
-1;

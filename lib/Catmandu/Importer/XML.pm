@@ -1,6 +1,6 @@
 package Catmandu::Importer::XML;
-# ABSTRACT: Import serialized XML documents
-# VERSION
+
+our $VERSION = '0.15';
 
 use namespace::clean;
 use Catmandu::Sane;
@@ -49,6 +49,13 @@ sub generator {
                $self->transform->transform($item) : $item
     }
 }
+
+1;
+__END__
+
+=head1 NAME
+
+Catmandu::Importer::XML - Import serialized XML documents
 
 =head1 DESCRIPTION
 
@@ -138,8 +145,6 @@ fully implemented yet!
 
 =back
 
-=encoding utf8
-
 =head1 SEE ALSO
 
 This module is just a thin layer on top of L<XML::Struct::Reader>. Have a look
@@ -148,4 +153,4 @@ XML-based data formats.
 
 =cut
 
-1;
+=encoding utf8

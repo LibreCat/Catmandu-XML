@@ -1,6 +1,6 @@
 package Catmandu::Fix::xml_transform;
-#ABSTRACT: transform XML using XSLT stylesheet
-#VERSION
+
+our $VERSION = '0.15';
 
 use Catmandu::Sane;
 use Moo;
@@ -46,6 +46,13 @@ sub emit {
     });
 }
 
+1;
+__END__
+
+=head1 NAME
+
+Catmandu::Fix::xml_transform - transform XML using XSLT stylesheet
+
 =head1 SYNOPSIS
      
   # Transforms the 'xml' from marcxml to dublin core xml
@@ -62,5 +69,3 @@ however, this fix E<always> transforms produces a string.
 One ore multiple XSLT scripts can be specified with argument C<file>.
 
 =cut
-
-1;
