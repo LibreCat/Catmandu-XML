@@ -36,9 +36,13 @@ Import serialized XML documents as data structures.
 
 Serialize data structures as XML documents.
 
+=item L<Catmandu::XML::Transformer>
+
+Utility module for XML/XSLT processing.
+
 =item L<Catmandu::Fix::xml_read>
 
-Fix function to parse XML to MicroXML as implemented by L<XML::Struct>
+Fix function to parse XML to MicroXML as implemented by L<XML::Struct>.
 
 =item L<Catmandu::Fix::xml_write>
 

@@ -11,20 +11,36 @@ use XML::Struct::Reader;
 use XML::Struct::Writer;
 
 has stylesheet => (
-    is       => 'ro',
-    coerce   => sub {
-        [ 
-            map {
-                XML::LibXSLT->new()->parse_stylesheet(
-                    XML::LibXML->load_xml(location => $_, no_cdata=>1)
-                )
-            } (ref $_[0] // '' eq 'ARRAY' ? @{$_[0]} : split /,/, $_[0])
-        ]
+    is      => 'ro',
+    coerce  => sub {
+        ref $_[0] // '' eq 'ARRAY' ? $_[0] : [ split /,/, $_[0] ]
     },
     default => sub { [] }
 );
 
-has output_format => (is => 'ro', coerce => sub { uc($_[0]) });
+has output_format => (
+    is     => 'ro', 
+    coerce => sub { lc $_[0] }
+);
+
+has process => (
+    is      => 'lazy',
+    builder => sub {
+        [
+            map {
+                XML::LibXSLT->new()->parse_stylesheet(
+                    XML::LibXML->load_xml(location => $_, no_cdata=>1)
+                )
+            } @{$_[0]->stylesheet} 
+        ]
+    }
+);
+
+sub BUILD {
+    if (@{$_[0]->process} and $_[0]->process->[-1]->output_method eq 'text') {
+        $_[0]->{output_format} = 'string'; 
+    }
+}
 
 sub transform {
     my ($self, $xml) = @_;
@@ -33,38 +49,39 @@ sub transform {
     return if !defined $xml;
 
     if (blessed $xml && $xml->isa('XML::LibXML::Document')) {
-        $format = 'DOM';
+        $format = 'dom';
     } elsif (ref $xml) {
         if (reftype $xml eq 'ARRAY') {
-            ($format, $xml) = (STRUCT => XML::Struct::Writer->new->write($xml));
+            $format = 'struct';
+            $xml = XML::Struct::Writer->new->write($xml);
         } else {
-            ($format, $xml) = (SIMPLE => XML::Struct::Writer->new(simple => 1)->write($xml));
+            $format = 'simple';
+            $xml = XML::Struct::Writer->new(simple => 1)->write($xml);
         }
     } else {
-        ($format, $xml) = (STRING => XML::LibXML->load_xml(string => $xml));
+        $format = 'string';
+        $xml = XML::LibXML->load_xml(string => $xml);
     }
 
     $format = $self->output_format if $self->output_format;
 
-    if (@{$self->stylesheet}) {
-        $format = 'STRING' if $_[0]->stylesheet->[-1]->output_method eq 'text';
-        foreach (@{$self->stylesheet}) {
+    if (@{$self->process}) {
+        foreach (@{$self->process}) {
             $xml = $_->transform($xml);
         }
     }
 
-    if ($format eq 'STRING') {
-        if ($self->stylesheet->[-1]) {
-            return $self->stylesheet->[-1]->output_as_chars($xml);
+    if ($format eq 'string') {
+        if ($self->process->[-1]) {
+            return $self->process->[-1]->output_as_chars($xml);
         } else {
             return $xml->toString;
         }
-    } elsif ($format eq 'STRUCT') {
+    } elsif ($format eq 'struct') {
         return XML::Struct::Reader->new( from => $xml )->readDocument;
-    } elsif ($format eq 'SIMPLE') {
-        # TODO: is root => 1 the right choice?
-        $xml = XML::Struct::Reader->new( from => $xml, simple => 1, root => 1 )->readDocument;
-        return $xml;
+    } elsif ($format eq 'simple') {
+        my $reader = XML::Struct::Reader->new( from => $xml, simple => 1, root => 1 );
+        return $reader->readDocument;
     } else {
         return $xml;
     }
@@ -75,17 +92,21 @@ __END__
 
 =head1 NAME
 
-Catmandu::XML::Transformer - Utility module for XSLT processing
+Catmandu::XML::Transformer - Utility module for XML/XSLT processing
 
 =cut
 
 =head1 SYNOPISIS
 
-    my $transformer = Catamandu::XML::Transformer->new( stylesheet => 'file.xsl' );
+    $transformer = Catamandu::XML::Transformer->new( stylesheet => 'file.xsl' );
 
-    $xml_string = $transformer->transform( $xml_string );
-    $xml_dom    = $transformer->transform( $xml_dom );
-    $xml_struct = $transformer->transform( $xml_struct );
+    $xml_string = $transformer->transform( $xml_string ); # SCALAR
+    $xml_dom    = $transformer->transform( $xml_dom );    # XML::LibXML::Document
+    $xml_struct = $transformer->transform( $xml_struct ); # ARRAY reference
+    $xml_simple = $transformer->transform( $xml_simple ); # HASH reference
+
+    $transformer = Catamandu::XML::Transformer->new( output_format => 'string' );
+    $xml_string  = $transformer->transform( $xml );       # any XML to SCALAR
 
 =head1 CONFIGURATION
 
@@ -93,14 +114,20 @@ Catmandu::XML::Transformer - Utility module for XSLT processing
 
 =item stylesheet
 
-XSLT file, comma-separated list of files or array reference with multiple files
-to apply as transformation pipeline.
+Zero or more XSLT files given as comma-separated list of files or array
+reference with multiple files to apply as transformation pipeline. Files are
+parsed once on instantiation of the Catmandu::XML::Transformer object.
+
+Returns an array reference of filenames if used as getter.
 
 =item output_format
 
-Expected output format C<DOM>, C<string>, C<struct>, C<simple>. By default the
+Expected output format C<dom>, C<string>, C<struct>, C<simple>. By default the
 input format triggers the output format. If the last stylesheet has text output
-(C<< <xsl:output method="text"/> >>) then output format is always C<string>.
+(C<< <xsl:output method="text"/> >>) then output format is automatically set to
+C<string>.
+
+Can also be used as getter.
 
 =back
 

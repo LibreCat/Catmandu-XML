@@ -1,6 +1,7 @@
 Changelog for Catmandu-XML
 
 {{$NEXT}}
+  - improved Catmandu::XML::Transformer
   - migrated to Milla
 
 0.14 2014-07-07T13:17:44
