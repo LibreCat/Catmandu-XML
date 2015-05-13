@@ -1,6 +1,8 @@
 Changelog for Catmandu-XML
 
 {{$NEXT}}
+
+0.15  2015-05-13 20:16:05 CEST
   - improved Catmandu::XML::Transformer
   - migrated to Milla
 
