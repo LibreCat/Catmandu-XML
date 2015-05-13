@@ -22,7 +22,7 @@ Catmandu::XML - modules for handling XML data within the Catmandu framework
 
 L<Catmandu::XML> contains modules for handling XML data within the L<Catmandu>
 framework. Parsing and serializing is based on L<XML::LibXML> with
-L<XML::Struct>.
+L<XML::Struct>. XSLT transormation is based on L<XML::LibXSLT>.
 
 =head1 MODULES
 
@@ -61,9 +61,9 @@ Fix function to transform XML using XSLT stylesheets.
 
 =head1 SEE ALSO
 
-This module requires the non-perl libraries libxml2 and libxslt installed. To
-install for instance on Ubuntu Linux call C<sudo apt-get install libxslt-dev
-libxml2-dev>.
+This module requires the libraries C<libxml2> and C<libxslt>. For instance on
+Ubuntu Linux call C<sudo apt-get install libxslt-dev libxml2-dev> before
+installation of Catmandu::XML.
 
 =encoding utf8
 

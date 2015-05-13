@@ -4,6 +4,7 @@ our $VERSION = '0.15';
 
 use Catmandu::Sane;
 use Moo;
+use Carp;
 use XML::LibXML;
 use XML::LibXSLT;
 use Scalar::Util qw(blessed reftype);
@@ -48,8 +49,12 @@ sub transform {
 
     return if !defined $xml;
 
-    if (blessed $xml && $xml->isa('XML::LibXML::Document')) {
-        $format = 'dom';
+    if (blessed $xml) {
+        if ($xml->isa('XML::LibXML::Document') or $xml->isa('XML::LibXML::Element')) {
+            $format = 'dom';
+        } else {
+            croak "Cannot convert ".ref($xml)." to XML";
+        }
     } elsif (ref $xml) {
         if (reftype $xml eq 'ARRAY') {
             $format = 'struct';
@@ -118,8 +123,6 @@ Zero or more XSLT files given as comma-separated list of files or array
 reference with multiple files to apply as transformation pipeline. Files are
 parsed once on instantiation of the Catmandu::XML::Transformer object.
 
-Returns an array reference of filenames if used as getter.
-
 =item output_format
 
 Expected output format C<dom>, C<string>, C<struct>, C<simple>. By default the
@@ -127,7 +130,19 @@ input format triggers the output format. If the last stylesheet has text output
 (C<< <xsl:output method="text"/> >>) then output format is automatically set to
 C<string>.
 
-Can also be used as getter.
+=back
+
+=head1 METHODS
+
+=over
+
+=item stylesheet()
+
+Returns an array reference of XSLT filenames used as transformation pipeline.
+
+=item output_format()
+
+Returns the output format or C<undef>.
 
 =back
 
