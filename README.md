@@ -12,7 +12,7 @@ Catmandu::XML - modules for handling XML data within the Catmandu framework
 
 [Catmandu::XML](https://metacpan.org/pod/Catmandu::XML) contains modules for handling XML data within the [Catmandu](https://metacpan.org/pod/Catmandu)
 framework. Parsing and serializing is based on [XML::LibXML](https://metacpan.org/pod/XML::LibXML) with
-[XML::Struct](https://metacpan.org/pod/XML::Struct).
+[XML::Struct](https://metacpan.org/pod/XML::Struct). XSLT transormation is based on [XML::LibXSLT](https://metacpan.org/pod/XML::LibXSLT).
 
 # MODULES
 
@@ -24,9 +24,13 @@ framework. Parsing and serializing is based on [XML::LibXML](https://metacpan.or
 
     Serialize data structures as XML documents.
 
+- [Catmandu::XML::Transformer](https://metacpan.org/pod/Catmandu::XML::Transformer)
+
+    Utility module for XML/XSLT processing.
+
 - [Catmandu::Fix::xml\_read](https://metacpan.org/pod/Catmandu::Fix::xml_read)
 
-    Fix function to parse XML to MicroXML as implemented by [XML::Struct](https://metacpan.org/pod/XML::Struct)
+    Fix function to parse XML to MicroXML as implemented by [XML::Struct](https://metacpan.org/pod/XML::Struct).
 
 - [Catmandu::Fix::xml\_write](https://metacpan.org/pod/Catmandu::Fix::xml_write)
 
@@ -43,9 +47,9 @@ framework. Parsing and serializing is based on [XML::LibXML](https://metacpan.or
 
 # SEE ALSO
 
-This module requires the non-perl libraries libxml2 and libxslt installed. To
-install for instance on Ubuntu Linux call `sudo apt-get install libxslt-dev
-libxml2-dev`.
+This module requires the libraries `libxml2` and `libxslt`. For instance on
+Ubuntu Linux call `sudo apt-get install libxslt-dev libxml2-dev` before
+installation of Catmandu::XML.
 
 # COPYRIGHT AND LICENSE
 
