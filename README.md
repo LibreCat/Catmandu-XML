@@ -4,8 +4,8 @@ Catmandu::XML - modules for handling XML data within the Catmandu framework
 
 # Status
 
-[![Build Status](https://travis-ci.org/gbv/Catmandu-XML.png)](https://travis-ci.org/gbv/Catmandu-XML)
-[![Coverage Status](https://coveralls.io/repos/gbv/Catmandu-XML/badge.png)](https://coveralls.io/r/gbv/Catmandu-XML)
+[![Build Status](https://travis-ci.org/LibreCat/Catmandu-XML.png)](https://travis-ci.org/LibreCat/Catmandu-XML)
+[![Coverage Status](https://coveralls.io/repos/LibreCat/Catmandu-XML/badge.png)](https://coveralls.io/r/LibreCat/Catmandu-XML)
 [![Kwalitee Score](http://cpants.cpanauthors.org/dist/Catmandu-XML.png)](http://cpants.cpanauthors.org/dist/Catmandu-XML)
 
 # DESCRIPTION
