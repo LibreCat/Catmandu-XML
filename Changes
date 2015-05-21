@@ -1,6 +1,7 @@
 Changelog for Catmandu-XML
 
 {{$NEXT}}
+  - Catmandu::Importer::XML option 'transform' renamed to 'xslt'
 
 0.15  2015-05-13 20:16:05 CEST
   - improved Catmandu::XML::Transformer

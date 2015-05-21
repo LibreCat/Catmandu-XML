@@ -96,9 +96,17 @@ check_import { type => 'simple', path => '/*/id', root => 'n' },
     "t/input.xml" => [ { n => 1 }, { n => 2 }, { n => 4 } ], 
     'multiple entries (simple)';
 
-check_import { type => 'simple', path => 'doc', transform => 't/transform3.xsl' },
+check_import { type => 'simple', path => 'doc', xslt => 't/transform3.xsl' },
     "t/collection.xml" => [ 
         { doz => 1 }, { doz => 2 }, { doz => 3 } 
     ], 'import with transformation'; 
+
+my $warn;
+$SIG{__WARN__} = sub { $warn = shift };
+check_import { type => 'simple', path => 'doc', transform => 't/transform3.xsl' },
+    "t/collection.xml" => [ 
+        { doz => 1 }, { doz => 2 }, { doz => 3 } 
+    ], 'import with transformation (deprecated option)'; 
+ok $warn, "deprecated option";
 
 done_testing;

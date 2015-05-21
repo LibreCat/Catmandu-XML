@@ -10,15 +10,30 @@ use Catmandu::XML::Transformer;
 
 with 'Catmandu::Importer';
 
-has type        => (is => 'ro', default => sub { 'simple' });
-has path        => (is => 'ro');
-has root        => (is => 'lazy', default => sub { defined $_[0]->path ? 1 : 0 });
-has depth       => (is => 'ro');
-has ns          => (is => 'ro', default => sub { '' });
-has attributes  => (is => 'ro', default => sub { 1 });
-has whitespace  => (is => 'ro', default => sub { 0 });
-has transform   => (is => 'ro', coerce => sub { 
-        Catmandu::XML::Transformer->new( stylesheet => $_[0] ) });
+has type       => (is => 'ro', default => sub { 'simple' });
+has path       => (is => 'ro');
+has root       => (is => 'lazy', default => sub { defined $_[0]->path ? 1 : 0 });
+has depth      => (is => 'ro');
+has ns         => (is => 'ro', default => sub { '' });
+has attributes => (is => 'ro', default => sub { 1 });
+has whitespace => (is => 'ro', default => sub { 0 });
+has xslt       => (
+    is => 'ro', 
+    lazy => 1,
+    coerce => sub {
+        Catmandu::XML::Transformer->new( stylesheet => $_[0] ) if defined $_[0]
+    },
+    builder => sub {
+        $_[0]->transform
+    } 
+);
+has transform => (
+    is => 'ro',
+    coerce => sub {
+        warn "Catmandu::Importer::XML option 'transform' renamed to 'xslt'\n";
+        $_[0];
+    }
+);
 
 sub generator {
     my ($self) = @_;
@@ -45,8 +60,8 @@ sub generator {
 
         # TODO: transformation should be done earlier for efficiency
         # and because simple format modifies the XML document (bug)
-        return $self->transform ?
-               $self->transform->transform($item) : $item
+        return $self->xslt ?
+               $self->xslt->transform($item) : $item
     }
 }
 
@@ -138,10 +153,14 @@ Set to C<strip> for stripping namespace prefixes and xmlns-attributes.
 
 Include ignoreable whitespace. Disabled by default.
 
+=item xslt
+
+Optional (list of) XSLT stylesheets to process records with
+L<Catmandu::XML::Transformer>.
+
 =item transform
 
-Optional (list of) XSLT stylesheets to process records. This option is not
-fully implemented yet!
+Deprecated alias for option C<xslt>.
 
 =back
 
