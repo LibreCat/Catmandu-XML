@@ -142,8 +142,8 @@ selected.
 
 =item root
 
-Include root element name, if enabled. Disabled by default, unless the C<path>
-option is set.
+Include root element name for type C<simple>. Disabled by default.  The option
+is ignored if type is not C<simple> or if a C<path> has explicitly been set.
 
 =item ns
 

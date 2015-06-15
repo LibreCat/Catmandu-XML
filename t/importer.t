@@ -10,7 +10,7 @@ sub check_import(@) {
     my $importer = Catmandu::Importer::XML->new(file => $file, %$options);
     
     my $data = $importer->to_array;
-#    use Data::Dumper; print Dumper($data)."\n";
+    use Data::Dumper; print Dumper($data)."\n";
     is_deeply $data, @_;
 }
 
@@ -66,7 +66,7 @@ check_import { type => 'ordered', attributes => 0 },
         ]
     ], 'ordered without attributes';
 
-check_import { type => 'simple', depth => 1 },
+check_import { type => 'simple', depth => 2 },
     \$xml => [
       {
         attr => 'value',
@@ -75,7 +75,7 @@ check_import { type => 'simple', depth => 1 },
             doz => [ [ doz => { }, ["baz"] ] ]
         }
       }
-    ], 'simple with depth=1';
+    ], 'simple with depth=2';
 
 check_import { type => 'simple' },
     "t/input.xml" => [ { id => [1,2,4], xx => 3 } ], 'simple';
@@ -89,8 +89,8 @@ check_import { type => 'simple', path => '/*/id' },
     'multiple entries (root included by default)';
 
 check_import { type => 'simple', path => '/*/id', root => 0 },
-    "t/input.xml" => [ { }, { }, { } ], 
-    'multiple entries (disable root)';
+    "t/input.xml" => [ { id => 1 }, { id => 2 }, { id => 4 } ], 
+    'multiple entries (root option ignored)';
 
 check_import { type => 'simple', path => '/*/id', root => 'n' },
     "t/input.xml" => [ { n => 1 }, { n => 2 }, { n => 4 } ], 
