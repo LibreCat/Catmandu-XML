@@ -21,7 +21,7 @@ has stylesheet => (
 
 has output_format => (
     is     => 'ro', 
-    coerce => sub { lc $_[0] }
+    coerce => sub { defined $_[0] ? lc $_[0] : undef }
 );
 
 has process => (

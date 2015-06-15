@@ -4,7 +4,9 @@ use Test::More;
 use Catmandu::XML::Transformer;
 use XML::LibXML;
 
-my $transformer = Catmandu::XML::Transformer->new( stylesheet => 't/transform1.xsl' );
+my $transformer = Catmandu::XML::Transformer->new(
+    stylesheet => 't/transform1.xsl'
+);
 
 is_deeply $transformer->stylesheet, ['t/transform1.xsl'], 'stylesheet';
 is $transformer->output_format, undef, 'output_format';
@@ -26,7 +28,14 @@ is_deeply $transformer->transform( [ doc => { attr => "bar" }, [ ] ] ),
 is_deeply $transformer->transform( { doc => 0 } ),
    { foo => {} }, 'xml_simple';
 
-$transformer = Catmandu::XML::Transformer->new( stylesheet => 't/transform2.xsl' );
+$transformer = Catmandu::XML::Transformer->new( 
+    stylesheet => 't/transform2.xsl' );
 is $transformer->output_format, 'string', 'output method=text';
+
+$transformer = Catmandu::XML::Transformer->new(
+    stylesheet => 't/transform1.xsl',
+    output_format => 'DOM',
+);
+is $transformer->output_format, 'dom', 'normalize output_format';
 
 done_testing;
