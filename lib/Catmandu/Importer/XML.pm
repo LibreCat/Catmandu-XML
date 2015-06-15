@@ -1,6 +1,6 @@
 package Catmandu::Importer::XML;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 use namespace::clean;
 use Catmandu::Sane;

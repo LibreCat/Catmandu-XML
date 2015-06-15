@@ -10,7 +10,6 @@ sub check_import(@) {
     my $importer = Catmandu::Importer::XML->new(file => $file, %$options);
     
     my $data = $importer->to_array;
-    use Data::Dumper; print Dumper($data)."\n";
     is_deeply $data, @_;
 }
 

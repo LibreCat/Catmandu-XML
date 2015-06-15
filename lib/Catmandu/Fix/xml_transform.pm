@@ -1,6 +1,6 @@
 package Catmandu::Fix::xml_transform;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 use Catmandu::Sane;
 use Moo;
@@ -78,5 +78,7 @@ One or more file names of optional XSLT scripts
 =item format
 
 Optional output format (C<string>, C<struct>, C<simple>, or C<dom>)
+
+=back
 
 =cut

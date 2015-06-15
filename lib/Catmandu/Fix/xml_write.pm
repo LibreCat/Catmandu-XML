@@ -1,30 +1,22 @@
 package Catmandu::Fix::xml_write;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 use Catmandu::Sane;
 use Moo;
 use XML::Struct::Writer;
 use XML::LibXML::Reader;
+use Catmandu::Fix::Has;
 
 with 'Catmandu::Fix::Base';
 
-has field      => (is => 'ro', required => 1);
-has attributes => (is => 'ro'); 
-has pretty     => (is => 'ro');
-has encoding   => (is => 'ro', default => sub { 'UTF-8' });
-has version    => (is => 'ro');
-has standalone => (is => 'ro');
-has xmldecl    => (is => 'ro', default => sub { 1 });
-
-around BUILDARGS => sub {
-    my ($orig,$class,$field,%opts) = @_;
-    $orig->($class, 
-        field      => $field,
-        map { $_ => $opts{$_} } grep { defined $opts{$_} }
-        qw(attributes pretty encoding version standalone xmldecl)
-    );
-};
+has field      => (fix_arg => 1);
+has attributes => (fix_opt => 1); 
+has pretty     => (fix_opt => 1);
+has encoding   => (fix_opt => 1, default => sub { 'UTF-8' });
+has version    => (fix_opt => 1);
+has standalone => (fix_opt => 1);
+has xmldecl    => (fix_opt => 1, default => sub { 1 });
 
 has _writer => (
     is      => 'ro',
@@ -63,7 +55,7 @@ __END__
 
 =head1 NAME
 
-Catmandu::Fix::xml_write - parse XML
+Catmandu::Fix::xml_write - serialize XML
 
 =head1 SYNOPSIS
      

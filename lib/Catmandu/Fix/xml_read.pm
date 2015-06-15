@@ -1,32 +1,24 @@
 package Catmandu::Fix::xml_read;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 use Catmandu::Sane;
 use Moo;
 use XML::Struct::Reader;
 use XML::LibXML::Reader;
+use Catmandu::Fix::Has;
 
 with 'Catmandu::Fix::Base';
 
-has field      => (is => 'ro', required => 1);
-has attributes => (is => 'ro'); 
-has ns         => (is => 'ro');
-has content    => (is => 'ro');
-has simple     => (is => 'ro');
-has root       => (is => 'ro');
-has depth      => (is => 'ro');
-has path       => (is => 'ro');
-has whitespace => (is => 'ro');
-
-around BUILDARGS => sub {
-    my ($orig,$class,$field,%opts) = @_;
-    $orig->($class, 
-        field => $field,
-        map { $_ => $opts{$_} } 
-        qw(attributes ns simple root depth content path whitespace)
-    );
-};
+has field      => (fix_arg => 1);
+has attributes => (fix_opt => 1); 
+has ns         => (fix_opt => 1);
+has content    => (fix_opt => 1);
+has simple     => (fix_opt => 1);
+has root       => (fix_opt => 1);
+has depth      => (fix_opt => 1);
+has path       => (fix_opt => 1);
+has whitespace => (fix_opt => 1);
 
 has _reader => (
     is      => 'ro',
@@ -64,21 +56,21 @@ __END__
 
 =head1 NAME
 
-Catmandu::Fix::xml_read - parser XML to MicroXML
+Catmandu::Fix::xml_read - parse XML to MicroXML
 
 =head1 SYNOPSIS
      
   # parse XML string given in field 'xml' 
   xml_read(xml)
-  xml_read(xml, attributes: 0)
   xml_read(xml, simple: 1)
+  xml_read(xml, attributes: 0)
 
 =head1 DESCRIPTION
 
 This L<Catmandu::Fix> parses XML strings into MicroXML or simple XML with
 L<XML::Struct>.
 
-=head1 OPTIONS
+=head1 CONFIGURATION
 
 Parsing can be configured with the following options of L<XML::Struct::Reader>:
 
@@ -86,37 +78,37 @@ Parsing can be configured with the following options of L<XML::Struct::Reader>:
 
 =item attributes
 
-Include XML attributes (enabled by default).
+Include XML attributes (enabled by default)
 
 =item ns
 
-Define processing of XML namespaces (C<keep> by default).
+Define processing of XML namespaces (C<keep> by default)
 
 =item whitespace
 
-Include ignorable whitespace as text elements (disabled by default).
+Include ignorable whitespace as text elements (disabled by default)
 
 =item simple
 
-Convert to simple key-value structure as known from L<XML::Simple>.
+Convert to simple key-value structure, as known from L<XML::Simple>
 
 =item root
 
-Keep (and possibly rename) root element when converting in C<simple> form.
+Keep (and possibly rename) root element when converting to C<simple> form
 
 =item depth
 
-Only transform to a given depth with option C<simple>.
+Only transform to a given depth with option C<simple>
 
 =item path
 
 Parse only given elements (and all of its child elements) and return as array.
 For instance C<< path => "p" >> in an XHTML document would return a list of
-parsed paragraphs (C<< <p>...</p> >>).
+parsed paragraphs (C<< <p>...</p> >>). This option overrides option C<root>.
 
 =item content
 
-not supported yet.
+Name of text content when converting to C<simple> form 
 
 =back
 
@@ -124,5 +116,6 @@ not supported yet.
 
 L<Catmandu::Fix::xml_write>,
 L<Catmandu::Fix::xml_simple>
+L<Catmandu::Fix::xml_transform>
 
 =cut

@@ -1,35 +1,27 @@
 package Catmandu::Fix::xml_simple;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 use Catmandu::Sane;
 use Moo;
 use XML::Struct::Reader;
 use XML::LibXML::Reader;
+use Catmandu::Fix::Has;
 
 with 'Catmandu::Fix::Base';
 
 # TODO: avoid code duplication with xml_read
 
-has field      => (is => 'ro', required => 1);
-has attributes => (is => 'ro'); 
-has ns         => (is => 'ro');
-has content    => (is => 'ro');
-has root       => (is => 'ro');
-has depth      => (is => 'ro');
-has path       => (is => 'ro');
-has whitespace => (is => 'ro');
+has field      => (fix_arg => 1);
+has attributes => (fix_opt => 1); 
+has ns         => (fix_opt => 1);
+has content    => (fix_opt => 1);
+has root       => (fix_opt => 1);
+has depth      => (fix_opt => 1);
+has path       => (fix_opt => 1);
+has whitespace => (fix_opt => 1);
 
 sub simple { 1 }
-
-around BUILDARGS => sub {
-    my ($orig,$class,$field,%opts) = @_;
-    $orig->($class, 
-        field => $field,
-        map { $_ => $opts{$_} } 
-        qw(attributes ns root depth content path whitespace)
-    );
-};
 
 has _reader => (
     is      => 'ro',

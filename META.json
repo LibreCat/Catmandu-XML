@@ -39,7 +39,7 @@
          "requires" : {
             "Catmandu" : "0.9",
             "XML::LibXSLT" : "1.78",
-            "XML::Struct" : "0.23"
+            "XML::Struct" : "0.26"
          }
       }
    },
@@ -55,7 +55,7 @@
          "web" : "https://github.com/LibreCat/Catmandu-XML"
       }
    },
-   "version" : "0.15",
+   "version" : "0.16",
    "x_contributors" : [
       "Jakob Voss <voss@gbv.de>",
       "Nicolas Franck <nicolas.franck@ugent.be>"
