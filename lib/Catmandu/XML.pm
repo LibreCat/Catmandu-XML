@@ -1,6 +1,6 @@
 package Catmandu::XML;
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 __END__
 

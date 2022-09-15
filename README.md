@@ -4,44 +4,42 @@ Catmandu::XML - modules for handling XML data within the Catmandu framework
 
 # Status
 
-[![Build Status](https://travis-ci.org/LibreCat/Catmandu-XML.png)](https://travis-ci.org/LibreCat/Catmandu-XML)
-[![Coverage Status](https://coveralls.io/repos/LibreCat/Catmandu-XML/badge.png)](https://coveralls.io/r/LibreCat/Catmandu-XML)
 [![Kwalitee Score](http://cpants.cpanauthors.org/dist/Catmandu-XML.png)](http://cpants.cpanauthors.org/dist/Catmandu-XML)
 
 # DESCRIPTION
 
-[Catmandu::XML](https://metacpan.org/pod/Catmandu::XML) contains modules for handling XML data within the [Catmandu](https://metacpan.org/pod/Catmandu)
-framework. Parsing and serializing is based on [XML::LibXML](https://metacpan.org/pod/XML::LibXML) with
-[XML::Struct](https://metacpan.org/pod/XML::Struct). XSLT transformation is based on [XML::LibXSLT](https://metacpan.org/pod/XML::LibXSLT).
+[Catmandu::XML](https://metacpan.org/pod/Catmandu%3A%3AXML) contains modules for handling XML data within the [Catmandu](https://metacpan.org/pod/Catmandu)
+framework. Parsing and serializing is based on [XML::LibXML](https://metacpan.org/pod/XML%3A%3ALibXML) with
+[XML::Struct](https://metacpan.org/pod/XML%3A%3AStruct). XSLT transormation is based on [XML::LibXSLT](https://metacpan.org/pod/XML%3A%3ALibXSLT).
 
 # MODULES
 
-- [Catmandu::Importer::XML](https://metacpan.org/pod/Catmandu::Importer::XML)
+- [Catmandu::Importer::XML](https://metacpan.org/pod/Catmandu%3A%3AImporter%3A%3AXML)
 
     Import serialized XML documents as data structures.
 
-- [Catmandu::Exporter::XML](https://metacpan.org/pod/Catmandu::Exporter::XML)
+- [Catmandu::Exporter::XML](https://metacpan.org/pod/Catmandu%3A%3AExporter%3A%3AXML)
 
     Serialize data structures as XML documents.
 
-- [Catmandu::XML::Transformer](https://metacpan.org/pod/Catmandu::XML::Transformer)
+- [Catmandu::XML::Transformer](https://metacpan.org/pod/Catmandu%3A%3AXML%3A%3ATransformer)
 
     Utility module for XML/XSLT processing.
 
-- [Catmandu::Fix::xml\_read](https://metacpan.org/pod/Catmandu::Fix::xml_read)
+- [Catmandu::Fix::xml\_read](https://metacpan.org/pod/Catmandu%3A%3AFix%3A%3Axml_read)
 
-    Fix function to parse XML to MicroXML as implemented by [XML::Struct](https://metacpan.org/pod/XML::Struct).
+    Fix function to parse XML to MicroXML as implemented by [XML::Struct](https://metacpan.org/pod/XML%3A%3AStruct).
 
-- [Catmandu::Fix::xml\_write](https://metacpan.org/pod/Catmandu::Fix::xml_write)
+- [Catmandu::Fix::xml\_write](https://metacpan.org/pod/Catmandu%3A%3AFix%3A%3Axml_write)
 
     Fix function to seralize XML.
 
-- [Catmandu::Fix::xml\_simple](https://metacpan.org/pod/Catmandu::Fix::xml_simple)
+- [Catmandu::Fix::xml\_simple](https://metacpan.org/pod/Catmandu%3A%3AFix%3A%3Axml_simple)
 
     Fix function to parse XML or convert MicroXML to simple form as known from
-    [XML::Simple](https://metacpan.org/pod/XML::Simple).
+    [XML::Simple](https://metacpan.org/pod/XML%3A%3ASimple).
 
-- [Catmandu::Fix::xml\_transform](https://metacpan.org/pod/Catmandu::Fix::xml_transform)
+- [Catmandu::Fix::xml\_transform](https://metacpan.org/pod/Catmandu%3A%3AFix%3A%3Axml_transform)
 
     Fix function to transform XML using XSLT stylesheets.
 
